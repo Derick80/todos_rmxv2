@@ -1,5 +1,3 @@
-import { SunIcon, MoonIcon } from "./icons";
-
 import { useTheme } from "./theme-provider";
 import {
   DropdownMenu,
@@ -9,6 +7,7 @@ import {
 } from "../ui/dropdown-menu";
 
 import { Button } from "../ui/button";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();

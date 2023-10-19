@@ -11,9 +11,6 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const { user } = useUser();
 
-  console.log(user, "user");
-  const userId = user?.id;
-  console.log(userId, "userId");
 
   return <div></div>;
 }

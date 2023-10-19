@@ -38,7 +38,6 @@ export async function loader(args: DataFunctionArgs) {
 export const ErrorBoundary = ClerkErrorBoundary();
 
 function App() {
-  const data = useLoaderData<typeof loader>();
   const { theme = "system" } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
   const onThemeChange = (theme: string) => {

@@ -42,3 +42,85 @@ export const H3 = React.forwardRef<
 ));
 
 H3.displayName = "H3";
+
+export const H4 = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h4
+    ref={ref}
+    className={cn(
+      "scroll-m-20 text-xl font-semibold tracking-tight",
+      className
+    )}
+    {...props}
+  />
+));
+
+H4.displayName = "H4";
+
+export const P = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("leading-7 [&:not(:first-child)]:mt-6", className)}
+    {...props}
+  />
+));
+
+P.displayName = "P";
+
+export const Large = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn("text-lg font-semibold", className)} {...props} />
+));
+
+Large.displayName = "Large";
+
+export const Small = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn("text-sm font-semibold", className)} {...props} />
+));
+
+Small.displayName = "Small";
+
+export const Medium = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-base font-semibold", className)}
+    {...props}
+  />
+));
+
+Medium.displayName = "Medium";
+
+export const Tiny = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn("text-xs font-semibold", className)} {...props} />
+));
+
+Tiny.displayName = "Tiny";
+
+export const Muted = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+));
+
+Muted.displayName = "Muted";
