@@ -1,4 +1,3 @@
-import { useUser } from '@clerk/remix'
 import { getAuth } from '@clerk/remix/ssr.server'
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
@@ -14,7 +13,6 @@ import {
     updateToDoTitle,
     updateTodoItem,
 } from '~/server/todos.server'
-import TodoMenu from './todo-menu'
 import React from 'react'
 import { Button } from '~/components/ui/button'
 import { useActionData, useLoaderData } from '@remix-run/react'
@@ -23,9 +21,8 @@ import { columns } from './data-table/columns'
 import { getAllCategories } from '~/server/categories.server'
 import CreateToDoComponent from './data-table/create-form'
 
-
 export async function loader(args: LoaderFunctionArgs) {
-    const { userId, sessionId, getToken } = await getAuth(args)
+    const { userId } = await getAuth(args)
 
     if (!userId) {
         return redirect('/sign-in')
@@ -227,9 +224,7 @@ export default function TodoRoute() {
                 categories={categories}
                 setUpdate={setUpdate}
             />
-            {create && <CreateToDoComponent
-              setCreate={setCreate}
-            />}
+            {create && <CreateToDoComponent setCreate={setCreate} />}
             {update && <P>Update</P>}
         </div>
     )

@@ -1,4 +1,10 @@
-import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from '@remix-run/react'
+import {
+    Form,
+    useActionData,
+    useLoaderData,
+    useNavigate,
+    useNavigation,
+} from '@remix-run/react'
 import React from 'react'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
@@ -17,8 +23,8 @@ import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { priorityOptions, statusOptions } from './table-data'
 
 const CreateToDoComponent = ({
-    setCreate
-}:{
+    setCreate,
+}: {
     setCreate: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
     const navigate = useNavigate()
@@ -27,25 +33,23 @@ const CreateToDoComponent = ({
         error: {
             title?: string
             categories?: string
-        },
+        }
         success: boolean
     }>()
 
     React.useEffect(() => {
         if (actionData?.success) {
             setCreate(false)
-            
-            
         }
-    }
-    , [actionData, setCreate, navigate])
+    }, [actionData, setCreate, navigate])
 
     const [priority, setPriority] = React.useState('🟡 Medium')
     const [status, setStatus] = React.useState('📝 To Do')
 
     return (
-        <Form method="POST"
-            action='/todos'
+        <Form
+            method="POST"
+            action="/todos"
         >
             <Label htmlFor="title">Title</Label>
             <Input
