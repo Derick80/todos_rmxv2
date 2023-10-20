@@ -1,4 +1,15 @@
+import type { Category } from "@prisma/client";
 import { prisma } from "./prisma.server";
+export type ToDoItem = {
+  id: string;
+  title: string;
+  content: string | null;
+  priority: string;
+  status: string;
+  notes: string | null;
+  userId: string;
+  categories: Category[];
+};
 
 type CreateToDoInput = {
   title: string;
@@ -25,6 +36,9 @@ export async function getTodoItems(userId: string) {
   return await prisma.todo.findMany({
     where: {
       userId,
+    },
+    include: {
+      categories: true,
     },
     orderBy: {
       createdAt: "desc",

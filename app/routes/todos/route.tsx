@@ -3,11 +3,21 @@ import { getAuth } from "@clerk/remix/ssr.server";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { z } from "zod";
+import { H2, P } from "~/components/ui/typography/typography";
 import {
   createTodoItem,
   deleteTodoItem,
+  getTodoItems,
   updateTodoItem,
 } from "~/server/todos.server";
+import TodoMenu from "./todo-menu";
+import React from "react";
+import { Button } from "~/components/ui/button";
+import { useActionData, useLoaderData } from "@remix-run/react";
+import { DataTable } from "./data-table/data-table";
+import { columns } from "./data-table/columns";
+import { getAllCategories } from "~/server/categories.server";
+import CreateToDoComponent from "./data-table/create-form";
 
 export async function loader(args: LoaderFunctionArgs) {
   const { userId, sessionId, getToken } = await getAuth(args);
@@ -15,36 +25,45 @@ export async function loader(args: LoaderFunctionArgs) {
   if (!userId) {
     return redirect("/sign-in");
   }
-
+  const todos = await getTodoItems(userId);
+  if (!todos) {
+    throw new Error("No todos found");
+  }
+  const categories = await getAllCategories();
+  if (!categories) {
+    throw new Error("No categories found");
+  }
   return json({
-    message: "Hello from the loader",
+    todos,
+    categories,
   });
 }
 const schema = z.discriminatedUnion("intent", [
   z.object({
     intent: z.literal("create"),
-    title: z.string(),
+    title: z.string().min(1, { message: "Title is required" }),
     content: z.string(),
     priority: z.string(),
     status: z.string(),
     notes: z.string(),
-    categories: z.string(),
+    categories: z.string().min(3, { message: "Category is required" }),
   }),
   z.object({
     intent: z.literal("update"),
     id: z.string(),
-    title: z.string(),
+    title: z.string().min(1, { message: "Title is required" }),
     content: z.string(),
     priority: z.string(),
     status: z.string(),
     notes: z.string(),
-    categories: z.string(),
+    categories: z.string().min(3, { message: "Category is required" }),
   }),
   z.object({
     intent: z.literal("delete"),
     id: z.string(),
   }),
 ]);
+
 export async function action(args: ActionFunctionArgs) {
   const { userId } = (await getAuth(args)) || {};
   if (!userId) {
@@ -58,8 +77,8 @@ export async function action(args: ActionFunctionArgs) {
 
   if (!result.success) {
     return json({
-      payload,
       error: result.error.flatten().fieldErrors,
+      success: false,
     });
   }
 
@@ -74,7 +93,10 @@ export async function action(args: ActionFunctionArgs) {
         categories: result.data.categories,
         userId,
       });
-      return json({ todo });
+      return json({
+        error: null,
+        success: true,
+      });
     }
     case "update": {
       const todo = await updateTodoItem({
@@ -87,23 +109,42 @@ export async function action(args: ActionFunctionArgs) {
         categories: result.data.categories,
         userId,
       });
-      return json({ todo });
+      return json({
+        error: null,
+        success: true,
+      });
     }
     case "delete": {
       const deleted = await deleteTodoItem(result.data.id);
-      return json({ deleted });
+      return json({
+        error: null,
+        success: true,
+      });
     }
     default: {
       return json({
-        payload,
         error: "Invalid intent",
+        success: false,
       });
     }
   }
 }
 
 export default function TodoRoute() {
-  const { user } = useUser();
+  const { todos, categories } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
+  const [create, setCreate] = React.useState(false);
+  const [update, setUpdate] = React.useState(false);
 
-  return <div className=''>put stuff here</div>;
+  return (
+    <div className='flex flex-col gap-2 md:gap-5'>
+      <H2>To Do</H2>
+      <Button variant='ghost' onClick={() => setCreate(!create)}>
+        {create ? "Cancel" : "Create"}
+      </Button>
+      <DataTable columns={columns} data={todos} />
+      {create && <CreateToDoComponent />}
+      {update && <P>Update</P>}
+    </div>
+  );
 }

@@ -18,7 +18,7 @@ import { ThemeToggle } from "./theme/theme-toggle";
 
 const TopNavigation = () => {
   return (
-    <div className='flex justify-around gap-2 md:gap-5 items-center p-4'>
+    <div className='flex justify-around gap-2 md:gap-5 items-center p-4 '>
       <H1>@Todos</H1>
       <DesktopMenu />
       <MobileMenu />
