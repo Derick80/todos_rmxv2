@@ -25,5 +25,9 @@ coverage
 prisma/
 .cache/
 postcss.config.js
-prettierr.config.js
+prettier.config.js
+tailwind.config.ts
+components.json
+/app/tailwind.css
+
 
