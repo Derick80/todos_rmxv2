@@ -1,4 +1,4 @@
-import { Form, useActionData, useLoaderData } from '@remix-run/react'
+import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from '@remix-run/react'
 import React from 'react'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
@@ -14,21 +14,39 @@ import { Button } from '~/components/ui/button'
 import CategoriesDisplay from './categories-display'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { priorityOptions, statusOptions } from './table-data'
 
-const CreateToDoComponent = () => {
+const CreateToDoComponent = ({
+    setCreate
+}:{
+    setCreate: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+    const navigate = useNavigate()
     const { categories } = useLoaderData<typeof loader>()
     const actionData = useActionData<{
         error: {
             title?: string
             categories?: string
-        }
+        },
+        success: boolean
     }>()
 
-    const [priority, setPriority] = React.useState('Medium')
-    const [status, setStatus] = React.useState('To Do')
+    React.useEffect(() => {
+        if (actionData?.success) {
+            setCreate(false)
+            
+            
+        }
+    }
+    , [actionData, setCreate, navigate])
+
+    const [priority, setPriority] = React.useState('🟡 Medium')
+    const [status, setStatus] = React.useState('📝 To Do')
 
     return (
-        <Form method="POST">
+        <Form method="POST"
+            action='/todos'
+        >
             <Label htmlFor="title">Title</Label>
             <Input
                 type="textarea"
@@ -52,9 +70,14 @@ const CreateToDoComponent = () => {
                     <SelectValue placeholder="Select a priority" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="Low">Low</SelectItem>
-                    <SelectItem value="Medium">Medium</SelectItem>
-                    <SelectItem value="High">High</SelectItem>
+                    {priorityOptions.map((option) => (
+                        <SelectItem
+                            key={option.value}
+                            value={option.label}
+                        >
+                            {option.label}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
             <input
@@ -74,10 +97,14 @@ const CreateToDoComponent = () => {
                     <SelectValue placeholder="Select a status" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="To Do">To Do</SelectItem>
-                    <SelectItem value="In Progress">In Progress</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                    <SelectItem value="On Hold">On Hold</SelectItem>
+                    {statusOptions.map((option) => (
+                        <SelectItem
+                            key={option.value}
+                            value={option.label}
+                        >
+                            {option.label}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
             <input

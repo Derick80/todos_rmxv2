@@ -1,4 +1,3 @@
-
 const statusOptions = [
     { label: `📝 To Do`, value: 'To Do' },
     { label: '⌛ In Progress', value: 'In Progress' },
@@ -8,14 +7,10 @@ const statusOptions = [
     { label: `🛑 Archived`, value: 'Archived' },
 ]
 
-
- const priorityOptions = [
+const priorityOptions = [
     { label: `🔴 High`, value: 'High' },
     { label: '🟡 Medium', value: 'Medium' },
     { label: `🟢 Low`, value: 'Low' },
 ]
 
-export  {
-    statusOptions,
-    priorityOptions,
-}
+export { statusOptions, priorityOptions }

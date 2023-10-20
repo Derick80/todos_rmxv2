@@ -15,7 +15,6 @@ import {
     TableRow,
 } from '~/components/ui/table'
 
-
 // not sure I need this
 declare module '@tanstack/react-table' {
     interface TableMeta<TData> extends Record<string, unknown> {

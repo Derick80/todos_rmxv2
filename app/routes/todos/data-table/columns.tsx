@@ -8,9 +8,7 @@ import {
     DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import { Button } from '~/components/ui/button'
-import {
-    DotsVerticalIcon,
-} from '@radix-ui/react-icons'
+import { DotsVerticalIcon } from '@radix-ui/react-icons'
 import { Form, useFetcher } from '@remix-run/react'
 import { Badge } from '~/components/ui/badge'
 import React from 'react'
@@ -92,25 +90,7 @@ export const columns: ColumnDef<ToDoItem>[] = [
     },
 ]
 
-function ActionMenu({
-    id,
-}: {
-    id: string
-}) {
-    const deleteFetcher = useFetcher()
-
-    const handleDelete = (id:string) => {
-      
-        deleteFetcher.submit({
-            id,
-            intent: 'delete',
-        },{
-            action: '/todos',
-            method: 'POST',
-          
-        })
-    }
-
+function ActionMenu({ id }: { id: string }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -124,30 +104,36 @@ function ActionMenu({
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            
+
                 <DropdownMenuItem>
-                    <deleteFetcher.Form
+                    <Form
                         method="POST"
-                        >
+                        replace
+                    >
+                        <input
+                            type="hidden"
+                            name="id"
+                            value={id}
+                        />
                         <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => handleDelete(id)}
+                            variant="destructive"
+                            name="intent"
+                            value="delete"
                         >
                             Delete
                         </Button>
-                        </deleteFetcher.Form>
+                    </Form>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )
 }
 
-function ToDoTitleEdit({item, name}:{item: ToDoItem, name: string}) {
+function ToDoTitleEdit({ item, name }: { item: ToDoItem; name: string }) {
     const fetcher = useFetcher()
     const titleFetcher = useDebounceFetcher()
     const [value, setValue] = React.useState(item.title)
-  
+
     const handleTitleChange = (value: string) => {
         setValue(value)
         titleFetcher.debounceSubmit(
@@ -166,15 +152,12 @@ function ToDoTitleEdit({item, name}:{item: ToDoItem, name: string}) {
     }
 
     return (
-        <fetcher.Form
-            method="POST"
-        >
+        <fetcher.Form method="POST">
             <Input
                 type="text"
                 name="title"
-                className='w-full'
+                className="w-full"
                 defaultValue={value}
-            
                 onChange={(e) => handleTitleChange(e.target.value)}
             />
         </fetcher.Form>

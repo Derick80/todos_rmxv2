@@ -17,8 +17,8 @@ model Todo {
   id String @id @default(cuid())
   title String
   content String?
-  priority String @default("Medium")
-  status String
+  priority String @default("🟡 Medium")
+  status String @default("📝 To Do")
   notes String? 
   userId String
   categories Category[]

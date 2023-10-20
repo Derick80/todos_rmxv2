@@ -23,6 +23,7 @@ import { columns } from './data-table/columns'
 import { getAllCategories } from '~/server/categories.server'
 import CreateToDoComponent from './data-table/create-form'
 
+
 export async function loader(args: LoaderFunctionArgs) {
     const { userId, sessionId, getToken } = await getAuth(args)
 
@@ -226,7 +227,9 @@ export default function TodoRoute() {
                 categories={categories}
                 setUpdate={setUpdate}
             />
-            {create && <CreateToDoComponent />}
+            {create && <CreateToDoComponent
+              setCreate={setCreate}
+            />}
             {update && <P>Update</P>}
         </div>
     )
