@@ -73,15 +73,24 @@ function DesktopMenu() {
 function MobileMenu() {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild className="md:hidden">
-                <Button variant="outline" size="icon">
+            <DropdownMenuTrigger
+                asChild
+                className="md:hidden"
+            >
+                <Button
+                    variant="outline"
+                    size="icon"
+                >
                     <HamburgerMenuIcon />
                     <span className="sr-only">Login/Register</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 {navLinks.map((link) => (
-                    <DropdownMenuItem key={link.id} asChild>
+                    <DropdownMenuItem
+                        key={link.id}
+                        asChild
+                    >
                         <NavLink
                             className={({ isActive }) =>
                                 ` ${isActive ? 'underline' : ''}`

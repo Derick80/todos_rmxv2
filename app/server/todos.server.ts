@@ -11,6 +11,9 @@ export type ToDoItem = {
     categories: Category[]
 }
 
+export type ToDOItemTableEdit = ToDoItem & {
+    updateTodoItem: (data: UpdateToDoInput) => Promise<ToDoItem>
+}
 type CreateToDoInput = {
     title: string
     content?: string
@@ -82,6 +85,105 @@ export async function deleteTodoItem(id: string) {
     return await prisma.todo.delete({
         where: {
             id,
+        },
+    })
+}
+
+type UpdateToDoTitle = {
+    id: string
+    title: string
+}
+export async function updateToDoTitle({ id, title }: UpdateToDoTitle) {
+    return await prisma.todo.update({
+        where: {
+            id,
+        },
+        data: {
+            title,
+        },
+    })
+}
+
+type UpdateToDoContent = {
+    id: string
+    content: string
+}
+export async function updateToDoContent({ id, content }: UpdateToDoContent) {
+    return await prisma.todo.update({
+        where: {
+            id,
+        },
+        data: {
+            content,
+        },
+    })
+}
+
+type UpdateToDoPriority = {
+    id: string
+    priority: string
+}
+export async function updateToDoPriority({ id, priority }: UpdateToDoPriority) {
+    return await prisma.todo.update({
+        where: {
+            id,
+        },
+        data: {
+            priority,
+        },
+    })
+}
+
+type UpdateToDoStatus = {
+    id: string
+    status: string
+}
+
+export async function updateToDoStatus({ id, status }: UpdateToDoStatus) {
+    return await prisma.todo.update({
+        where: {
+            id,
+        },
+        data: {
+            status,
+        },
+    })
+}
+
+type UpdateToDoNotes = {
+    id: string
+    notes: string
+}
+export async function updateToDoNotes({ id, notes }: UpdateToDoNotes) {
+    return await prisma.todo.update({
+        where: {
+            id,
+        },
+        data: {
+            notes,
+        },
+    })
+}
+
+type UpdateToDoCategories = {
+    id: string
+    categories: string
+}
+export async function updateToDoCategories({
+    id,
+    categories,
+}: UpdateToDoCategories) {
+    return await prisma.todo.update({
+        where: {
+            id,
+        },
+        data: {
+            categories: {
+                connectOrCreate: categories?.split(',').map((category) => ({
+                    where: { value: category },
+                    create: { value: category, label: category },
+                })),
+            },
         },
     })
 }

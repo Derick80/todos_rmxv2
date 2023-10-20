@@ -19,7 +19,7 @@ model Todo {
   content String?
   priority String @default("Medium")
   status String
-  notes String?
+  notes String? 
   userId String
   categories Category[]
   createdAt DateTime @default(now())

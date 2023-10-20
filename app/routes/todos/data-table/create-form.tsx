@@ -9,7 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '~/components/ui/select'
-import type { action, loader } from '../route'
+import type { loader } from '../route'
 import { Button } from '~/components/ui/button'
 import CategoriesDisplay from './categories-display'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
@@ -30,7 +30,10 @@ const CreateToDoComponent = () => {
     return (
         <Form method="POST">
             <Label htmlFor="title">Title</Label>
-            <Input type="textarea" name="title" />
+            <Input
+                type="textarea"
+                name="title"
+            />
             {actionData?.error?.title && (
                 <Alert variant="destructive">
                     <ExclamationTriangleIcon />
@@ -54,7 +57,11 @@ const CreateToDoComponent = () => {
                     <SelectItem value="High">High</SelectItem>
                 </SelectContent>
             </Select>
-            <input type="hidden" name="priority" value={priority} />
+            <input
+                type="hidden"
+                name="priority"
+                value={priority}
+            />
             <Label htmlFor="status">Status</Label>
             <Select
                 onValueChange={(value) => [
@@ -73,11 +80,21 @@ const CreateToDoComponent = () => {
                     <SelectItem value="On Hold">On Hold</SelectItem>
                 </SelectContent>
             </Select>
-            <input type="hidden" name="status" value={status} />
+            <input
+                type="hidden"
+                name="status"
+                value={status}
+            />
             <Label htmlFor="content">Content</Label>
-            <Input type="textarea" name="content" />
+            <Input
+                type="textarea"
+                name="content"
+            />
             <Label htmlFor="notes">Notes</Label>
-            <Input type="textarea" name="notes" />
+            <Input
+                type="textarea"
+                name="notes"
+            />
             <Label htmlFor="categories">Categories</Label>
             <CategoriesDisplay categories={categories} />
             {actionData?.error?.categories && (
@@ -89,7 +106,11 @@ const CreateToDoComponent = () => {
                     </AlertDescription>
                 </Alert>
             )}
-            <Button type="submit" name="intent" value="create">
+            <Button
+                type="submit"
+                name="intent"
+                value="create"
+            >
                 Create
             </Button>
         </Form>

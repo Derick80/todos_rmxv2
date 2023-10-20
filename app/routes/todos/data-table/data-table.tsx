@@ -1,9 +1,10 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, TableMeta } from '@tanstack/react-table'
 import {
     flexRender,
     getCoreRowModel,
     useReactTable,
 } from '@tanstack/react-table'
+import React from 'react'
 
 import {
     Table,
@@ -14,19 +15,51 @@ import {
     TableRow,
 } from '~/components/ui/table'
 
+
+// not sure I need this
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData> extends Record<string, unknown> {
+        updateData: (rowIndex: number, columnId: string, value: string) => void
+        deleteData: (rowIndex: number) => void
+    }
+}
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    initialData: TData[]
+    meta: {
+        updateData: (rowIndex: number, columnId: string, value: string) => void
+        deleteData: (rowIndex: number) => void
+    }
 }
 
 export function DataTable<TData, TValue>({
     columns,
-    data,
-}: DataTableProps<TData, TValue>) {
+    initialData,
+}: DataTableProps<TData, TValue & Record<string, unknown> & TableMeta<TData>>) {
+    const [data, setData] = React.useState(() => [...initialData])
+
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        meta: {
+            updateData: (rowIndex: number, columnId: string, value: string) => {
+                setData((old) =>
+                    old.map((row, index) => {
+                        if (index === rowIndex) {
+                            return {
+                                ...old[rowIndex],
+                                [columnId]: value,
+                            }
+                        }
+                        return row
+                    })
+                )
+            },
+            deleteData: (rowIndex: number) => {
+                setData((old) => old.filter((_, index) => index !== rowIndex))
+            },
+        },
     })
 
     return (

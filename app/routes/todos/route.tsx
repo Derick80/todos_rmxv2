@@ -8,6 +8,10 @@ import {
     createTodoItem,
     deleteTodoItem,
     getTodoItems,
+    updateToDoContent,
+    updateToDoPriority,
+    updateToDoStatus,
+    updateToDoTitle,
     updateTodoItem,
 } from '~/server/todos.server'
 import TodoMenu from './todo-menu'
@@ -61,6 +65,36 @@ const schema = z.discriminatedUnion('intent', [
     z.object({
         intent: z.literal('delete'),
         id: z.string(),
+    }),
+    z.object({
+        intent: z.literal('update-title'),
+        id: z.string(),
+        title: z.string().min(1, { message: 'Title is required' }),
+    }),
+    z.object({
+        intent: z.literal('update-content'),
+        id: z.string(),
+        content: z.string(),
+    }),
+    z.object({
+        intent: z.literal('update-priority'),
+        id: z.string(),
+        priority: z.string(),
+    }),
+    z.object({
+        intent: z.literal('update-status'),
+        id: z.string(),
+        status: z.string(),
+    }),
+    z.object({
+        intent: z.literal('update-notes'),
+        id: z.string(),
+        notes: z.string(),
+    }),
+    z.object({
+        intent: z.literal('update-categories'),
+        id: z.string(),
+        categories: z.string().min(3, { message: 'Category is required' }),
     }),
 ])
 
@@ -121,6 +155,47 @@ export async function action(args: ActionFunctionArgs) {
                 success: true,
             })
         }
+        case 'update-title': {
+            const todo = await updateToDoTitle({
+                id: result.data.id,
+                title: result.data.title,
+            })
+            return json({
+                error: null,
+                success: true,
+            })
+        }
+        case 'update-content': {
+            const todo = await updateToDoContent({
+                id: result.data.id,
+                content: result.data.content,
+            })
+            return json({
+                error: null,
+                success: true,
+            })
+        }
+        case 'update-priority': {
+            const todo = await updateToDoPriority({
+                id: result.data.id,
+                priority: result.data.priority,
+            })
+            return json({
+                error: null,
+                success: true,
+            })
+        }
+        case 'update-status': {
+            const todo = await updateToDoStatus({
+                id: result.data.id,
+                status: result.data.status,
+            })
+            return json({
+                error: null,
+                success: true,
+            })
+        }
+
         default: {
             return json({
                 error: 'Invalid intent',
@@ -139,10 +214,18 @@ export default function TodoRoute() {
     return (
         <div className="flex flex-col gap-2 md:gap-5">
             <H2>To Do</H2>
-            <Button variant="ghost" onClick={() => setCreate(!create)}>
+            <Button
+                variant="ghost"
+                onClick={() => setCreate(!create)}
+            >
                 {create ? 'Cancel' : 'Create'}
             </Button>
-            <DataTable columns={columns} data={todos} />
+            <DataTable
+                initialData={todos}
+                columns={columns}
+                categories={categories}
+                setUpdate={setUpdate}
+            />
             {create && <CreateToDoComponent />}
             {update && <P>Update</P>}
         </div>

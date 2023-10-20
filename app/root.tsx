@@ -51,7 +51,10 @@ function App() {
         )
     }
     return (
-        <html lang="en" className={theme ?? 'theme'}>
+        <html
+            lang="en"
+            className={theme ?? 'theme'}
+        >
             <head>
                 <meta charSet="utf-8" />
                 <meta
